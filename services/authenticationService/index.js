@@ -3,10 +3,14 @@ const session = require("express-session");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const dbConnect = require('./config/db');
+const path = require("path");
+const authRoutes = require('./routes/authRoutes');
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const app = express();
+dbConnect();
 
 // Middlewares
 const corsOptions = {
@@ -28,6 +32,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.AUTH_PORT || 8011;
 
