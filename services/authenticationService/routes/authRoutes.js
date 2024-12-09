@@ -11,12 +11,13 @@ const {
 } = require("../controllers/authController");
 
 const router = express.Router();
+const authenticationCheck = require("../middlewares/authMiddleware");
 
 // Registration route
 router.post("/register", register);
 
 // Login route
-router.post("/login", login);
+router.post("/login", passport.authenticate("local"), login);
 
 // Auth status route
 router.get("/status", authStatus);
@@ -25,12 +26,12 @@ router.get("/status", authStatus);
 router.post("/logout", logout);
 
 // 2fa setup
-router.post("/2fa/setup", setUp2fa);
+router.post("/2fa/setup", authenticationCheck, setUp2fa);
 
 // Verify 2fa route
-router.post("/2fa/verify", verify2fa);
+router.post("/2fa/verify", authenticationCheck, verify2fa);
 
 // Reset 2fa route
-router.post("/2fa/reset", reset2fa);
+router.post("/2fa/reset", authenticationCheck, reset2fa);
 
 module.exports = router;

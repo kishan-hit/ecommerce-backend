@@ -6,6 +6,7 @@ const cors = require("cors");
 const dbConnect = require('./config/db');
 const path = require("path");
 const authRoutes = require('./routes/authRoutes');
+require('./config/passportConfig');
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 

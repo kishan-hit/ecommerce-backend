@@ -24,7 +24,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js",
-    "auth-service": "nodemon services/authenticationService/index.js"
+    "auth-service": "nodemon services/authenticationService/index.js",
+    "category-service": "nodemon services/categoryServics/index.js"
   },
   "keywords": [],
   "author": "",
