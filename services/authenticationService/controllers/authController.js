@@ -6,10 +6,10 @@ const User = require("../models/user");
 
 const register = async (req, res) => {
     try {
-        const { userName, password } = req.body;
+        const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
-            userName,
+            email,
             password: hashedPassword
         });
         await newUser.save();
@@ -23,7 +23,7 @@ const login = async (req, res) => {
     console.log(`The authenticated user is : ${req.user}`);
     res.status(200).json({
         message: "User logged in successfully",
-        username: req.user.userName,
+        email: req.user.email,
         is2faActive: req.user.is2faActive
     });
 }
@@ -34,7 +34,7 @@ const authStatus = async (req, res) => {
     }
     res.status(200).json({
         message: "User logged in successfully",
-        username: req.user.userName,
+        email: req.user.email,
         is2faActive: req.user.is2faActive
     })
 }
@@ -60,7 +60,7 @@ const setUp2fa = async (req, res) => {
         await user.save();
         const url = speakEasy.otpauthURL({
             secret: secret.base32,
-            label: `${req.user.userName}`,
+            label: `${req.user.email}`,
             issuer: "Kishan",
             encoding: "base32"
         });
@@ -85,7 +85,7 @@ const verify2fa = async (req, res) => {
     });
     if (verified) {
         const jwtToken = jwt.sign(
-            { username: user.userName },
+            { email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: "1hr" }
         );
