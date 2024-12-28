@@ -3,6 +3,7 @@ const passport = require("passport");
 const {
     register,
     login,
+    googleLogin,
     authStatus,
     logout,
     setUp2fa,
@@ -18,6 +19,23 @@ router.post("/register", register);
 
 // Login route
 router.post("/login", passport.authenticate("local"), login);
+
+// Google login
+// router.post("/users/google-login", passport.authenticate("google", { scope: ['profile'] }), googleLogin);
+
+// 1. Initiate Google Authentication
+router.get("/google-login", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+// 2. Handle Callback from Google
+router.get(
+    "/google/callback",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    (req, res) => {
+        const user = req.user;
+        const userParam = encodeURIComponent(JSON.stringify(user));
+        res.redirect(`http://localhost:3000/auth/google/callback?user=${userParam}`);
+    }
+);
 
 // Auth status route
 router.get("/status", authStatus);

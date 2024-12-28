@@ -9,7 +9,17 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: true
+            required: function () {
+                return !this.googleId;
+            }
+        },
+        googleId: {
+            type: String,
+            unique: true,
+            sparse: true
+        },
+        name: {
+            type: String
         },
         is2faActive: {
             type: Boolean,

@@ -3,6 +3,7 @@ const session = require("express-session");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const cookieSession = require('cookie-session');
 const dbConnect = require('./config/db');
 const path = require("path");
 const authRoutes = require('./routes/authRoutes');
@@ -15,7 +16,7 @@ dbConnect();
 
 // Middlewares
 const corsOptions = {
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002"],
     credentials: true
 }
 app.use(cors(corsOptions));
@@ -24,10 +25,8 @@ app.use(express.urlencoded({ extended: true, limit: "100mb" }));
 app.use(session({
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 60000 * 60
-    }
+    saveUninitialized: true,
+    cookie: { secure: false }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
